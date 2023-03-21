@@ -13,7 +13,7 @@ final class WorkoutListViewModelTests: XCTestCase {
     var viewModel: WorkoutListViewModel!
     var mockWorkoutDataLoader: MockWorkoutDataLoader!
 
-    override func setUpWithError() throws {
+    @MainActor override func setUpWithError() throws {
         mockWorkoutDataLoader = MockWorkoutDataLoader()
         viewModel = WorkoutListViewModel(workoutDataLoader: mockWorkoutDataLoader)
     }
