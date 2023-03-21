@@ -11,15 +11,15 @@ import SwiftUI
 /// This view is responsible for showing workout list and maximum one rep max for each exercise.
 struct WorkoutListView: View {
     @ObservedObject var viewModel = WorkoutListViewModel()
-
+    
     var body: some View {
         contentView
-            .onAppear {
-                viewModel.loadFile()
+            .task {
+                await viewModel.loadFile()
                 viewModel.calculateOneRepMaxByExercise()
             }
     }
-
+    
     @ViewBuilder
     private var contentView: some View {
         if viewModel.oneRepMaxByExercise.isEmpty {
@@ -31,7 +31,7 @@ struct WorkoutListView: View {
             }
         }
     }
-
+    
     /// Will be displayed when no data returned
     private var emptyStateView: some View {
         VStack {
@@ -39,7 +39,7 @@ struct WorkoutListView: View {
                 .foregroundColor(.secondary)
         }
     }
-
+    
     /// Using List for SwiftUI table. We could use lazyVstack also for more customization but as its a simple tableview so list make sense here.
     private var listView: some View {
         List {
@@ -52,7 +52,7 @@ struct WorkoutListView: View {
         .padding([.top], 16)
         .listStyle(.plain)
     }
-
+    
     /// Content view for each row.
     private func exerciseRowView(exercise: String, oneRepMax: Double) -> some View {
         HStack(alignment: .firstTextBaseline) {
@@ -68,7 +68,7 @@ struct WorkoutListView: View {
             Text(String(format: "%.2f", oneRepMax))
         }
     }
-
+    
     private func workoutDetailsView(exercise: String) -> WorkoutDetailsView {
         WorkoutDetailsView(exercise: exercise, viewModel: WorkoutDetailsViewModel(workouts: viewModel.workouts))
     }

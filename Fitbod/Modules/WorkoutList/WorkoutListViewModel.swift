@@ -8,6 +8,7 @@
 import Foundation
 
 /// This is a model for list view. Here, Its loading the data and and calculating maximum `one rep max` for each exercise. This will be displayed on the list view for each exercise.
+@MainActor
 final class WorkoutListViewModel: ObservableObject {
     @Published var workouts: [Workout] = []
     @Published var oneRepMaxByExercise: [String: Double] = [:]
@@ -17,8 +18,12 @@ final class WorkoutListViewModel: ObservableObject {
         self.workoutDataLoader = workoutDataLoader
     }
     
-    func loadFile() {
-        workouts = workoutDataLoader.loadWorkouts(fileName: "WorkoutData")
+    func loadFile() async {
+        do {
+            workouts = try await workoutDataLoader.loadWorkouts(fileName: "WorkoutData")
+        } catch {
+            print("Error loading file data: \(error)")
+        }
     }
     
     func calculateOneRepMaxByExercise() {
