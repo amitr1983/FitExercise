@@ -1,7 +1,7 @@
 # FitExercise
  
 <!-- Fitbod iOS challenge -->
-How to run:
+**How to run:**
 1)  Download the zip file and unzip it.
 2)  Open `Fitbod.xcodeproj` in xcode
 3)  Run project (cmd + R or Product > Run)
