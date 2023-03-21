@@ -9,11 +9,12 @@ import XCTest
 @testable import Fitbod
 
 /// I have added minimum tests. In the future, we could improve test coverage.
+@MainActor
 final class WorkoutListViewModelTests: XCTestCase {
     var viewModel: WorkoutListViewModel!
     var mockWorkoutDataLoader: MockWorkoutDataLoader!
 
-    @MainActor override func setUpWithError() throws {
+    override func setUpWithError() throws {
         mockWorkoutDataLoader = MockWorkoutDataLoader()
         viewModel = WorkoutListViewModel(workoutDataLoader: mockWorkoutDataLoader)
     }
@@ -22,8 +23,8 @@ final class WorkoutListViewModelTests: XCTestCase {
         viewModel = nil
     }
 
-    func testLoadFile() {
-        viewModel.loadFile()
+    func testLoadFile() async {
+        await viewModel.loadFile()
 
         XCTAssertEqual(viewModel.workouts.count, 2)
         XCTAssertEqual(viewModel.workouts[0].exercise, "Squats")
@@ -32,7 +33,7 @@ final class WorkoutListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.workouts[1].oneRepMax, 168.75)
     }
 
-    func testCalculateOneRepMaxByExercise() {
+    func testCalculateOneRepMaxByExercise() async {
         viewModel.workouts = [
             Workout(date: Date(), exercise: "Squats", set: 3, reps: 5, weight: 250),
             Workout(date: Date(), exercise: "Bench Press", set: 3, reps: 5, weight: 150)
